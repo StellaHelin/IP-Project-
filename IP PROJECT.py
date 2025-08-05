@@ -136,14 +136,14 @@ def reviews():
             give_review()
             break
         elif choice2==2:
-            read_review()
+            read_reviews()
             break
         elif choice2==3:
-            home_page()
             break
         else:
             print("Invalid choice")
             reviews()
+#Give reviews
 def give_review():
     name=input("Enter yout name : ")
     rate=int(input("Rate your experience (1-5): "))
@@ -176,8 +176,36 @@ def confirm(rate,name,description):
             print("Invalid choice")
             print()
             return confirm(rate,name,description)
-                       
-    
+
+#Read reviews
+def read_reviews():
+    df1=pd.read_csv(r"C:\Users\stell\OneDrive\Desktop\IP\review.csv",header=None,names=["Rating","Name","Review"])
+    for index,row in df1.iterrows():
+        print("REVIEW",index+1)
+        print("──────────────")
+        print("Rating :", row['Rating'])
+        print("Name   :", row['Name'])
+        print("Review :", row['Review'])
+        print("\n" + "-"*60 + "\n")
+    print()
+    input("Press enter to return to homepage")
+
+
+#HELP
+def page_help():
+    print()
+    print("""
+Need assistance?
+
+📞 Customer Care: +91-987654
+🕒 Available: 8:00 AM – 10:00 PM, All Days
+
+For any queries related to booking, cancellation, or payments, feel free to call us!
+
+Press enter to return to the homepage.
+""")
+    input()
+#Exit    
 def page_exit():
     print("""
              __   __                _                                          _      _                    __                           _  
