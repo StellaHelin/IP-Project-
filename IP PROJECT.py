@@ -98,7 +98,7 @@ def home_page():
             print("Invalid choice")
                    
 
-
+# ABOUT US
 def page_about():
     print("""Welcome to BlueBus, your trusted companion for seamless and affordable bus travel.
 
@@ -116,15 +116,13 @@ Whether you're commuting between cities, planning a trip, or just heading home, 
 
 🙋 Reach support anytime
 
-All from one simple console-based app.
-
 This project is a part of our learning journey in software development — combining Python, MySQL, and a love for solving practical problems.
 
 We believe smart travel should be for everyone — and BlueBus is our step in that direction.""")
     print()
     input("Please press enter to go back")
 
-
+#REVIEWS
 def reviews():
     while True:
         print("""
@@ -136,10 +134,13 @@ def reviews():
         choice2=int(input("Enter your choice : "))
         if choice2==1:
             give_review()
+            break
         elif choice2==2:
             read_review()
+            break
         elif choice2==3:
             home_page()
+            break
         else:
             print("Invalid choice")
             reviews()
@@ -152,6 +153,7 @@ def give_review():
         print("Please enter a rating between 1 and 5.")
         return give_review()
     description=input("Enter your review :")
+    print()
     print("Rating : ",rate)
     print("Name : ",name)
     print("Review : ",description)
@@ -166,9 +168,8 @@ def confirm(rate,name,description):
             print()
             print("Thanks for sharing your thoughts with BlueBus! Safe travels!")
             print()
-            input("Press enter to back")
+            input("Press enter to return to homepage")
             print()
-            home_page()
         elif choice3=="N":
             return give_review()
         else:
@@ -185,5 +186,5 @@ def page_exit():
                |_|\___/\_,_|_|    _/ \___/\_,_|_| |_||_\___|\_, | \___|_||_\__,_/__/ |_||_\___|_| \___|  |_| \___/_|   |_||_\___/\_/\_/(_)
                                  |__/                       |__/                                 """)
 home_page()
-print("hi")
+
 
