@@ -1,3 +1,6 @@
+from datetime import datetime
+import pandas as pd
+
 def home_page():
     while True:
         print("""
@@ -92,7 +95,108 @@ def home_page():
         else:
             print("Invalid choice")
                    
+def page_book():
+    current_datetime = datetime.now()
+    print(datetime)
+    print("you are currently booking a ticket for tommorow ")
+    print(f"Today's date: {current_datetime.strftime('%Y-%m-%d')}")
+    
+    #destination
+    start_list=["1.Chennai","2.Bangalore","3.Mysore","4.Rameshwaram","5.Kanyakumari"]
+    end_list=["1.Chennai","2.Bangalore","3.Mysore","4.Rameshwaram","5.Kanyakumari"]
+    print()
+    print(start_list)
+    start=int(input("enter your start location option : "))
+    print()
+    print(end_list)
+    drop=int(input("enter your drop location option : "))
+    
+    df=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.txt")
+    new_df=df[(df["start"] == start_list[start-1][2:]) & (df["end"] == end_list[drop-1][2:])]
+    print()
+    print("start location:",start_list[start-1][2:],"drop location:",end_list[drop-1][2:])
+    print(new_df)
+    print()
+    a=int(input("enter the bus option you want to choose:"))
+    while a not in new_df.index:
+        print("invalid bus option")
+        a=int(input("enter the bus option you want to choose:"))
+        
+    #print(new_df.loc[a])
+    print()
+    #details
+    tickets=int(input("enter the no. of tickets you want to book:"))
+    NAMES=[]
+    AGE=[]
+    SEX=[]
+    PHONE=[]
+    while tickets>df.loc[a,"tickets"]:
+        print("not enough tickets, select fewer tickets")
+        tickets=int(input("enter the no. of tickets you want to book:"))
+    for i in range(1,tickets+1):
+            print("enter passenger",i," name :")
+            name=input()
+            print("enter passenger",i," age :")
+            age=int(input())
+            print("enter passenger",i," sex(M/F):")
+            sex=input()
+            while sex!="M" and sex!="F":
+                print("invalid input pls try again!")
+                sex=input()
+            print("enter passanger",i,"phone no.:")
+            ph=input()
+            while len(ph)>10 or len(ph)<10:
+                print("invalid input pls try booking again!")
+                ph=input()
+            NAMES.append(name)
+            AGE.append(age)
+            SEX.append(sex)
+            PHONE.append(ph)
+    #print(df.loc[a,"tickets"])
+    
+    df.loc[a,"tickets"]-=tickets
+    
+    det=pd.DataFrame({"name":NAMES,"age":AGE,"sex":SEX,"phone.no":PHONE})
+    det.to_csv(r"E:\AnushkaProjecy\IP-Project-\bookings.csv",mode="a",header=False)
+    df.to_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.csv")
+    
+            
+     
+    #payment
+    total_am=df.loc[a,"cost"]*tickets
+    print("total amount to be paid:",total_am) 
+    pay=int(input("""enter which payment method you want to choose
+    1.upi
+    2.card
+    :"""))
+    if pay==1:
+        payment_method="upi"
+        print("payment succesful")
+    elif pay==2:
+        payment_method="card"
+        print("payment successful")
+    else:
+        print("invalid option, payment failed, try booking again")
+        return;
+       
+    print("ticket details are as follows:")
+    
+    
+        
+    
+    
+   
+       
+    
+    
 
+    
+
+    
+        
+
+
+  
 
 def page_about():
     print("""Welcome to BlueBus, your trusted companion for seamless and affordable bus travel.
