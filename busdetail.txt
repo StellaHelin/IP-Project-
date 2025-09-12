@@ -1,6 +1,6 @@
 start,end,name,time,cost,day,tickets
 Chennai,Bangalore,suraj_travels,6:00pm,200,Wednesday,100
-Bangalore,Mysore,greenline,7:30am,150,Thursday,120
+Bangalore,Mysore,greenline,7:30am,150,Thursday,117
 Mysore,Chennai,ksrtc,9:00pm,300,Friday,95
 Rameshwaram,Kanyakumari,royal_travels,5:45am,250,Saturday,110
 Kanyakumari,Bangalore,orange_tours,10:15pm,500,Sunday,130
@@ -16,6 +16,6 @@ Rameshwaram,Chennai,intercity,3:30pm,280,Tuesday,88
 Kanyakumari,Mysore,star_travels,5:00pm,470,Wednesday,108
 Mysore,Bangalore,ksrtc,6:40am,180,Thursday,95
 Chennai,Kanyakumari,royal_travels,10:20pm,700,Friday,145
-Bangalore,Rameshwaram,orange_tours,8:00am,450,Saturday,112
+Bangalore,Rameshwaram,orange_tours,8:00am,450,Saturday,111
 Mysore,Chennai,srs_travels,1:10pm,330,Sunday,120
 Rameshwaram,Bangalore,national_travels,9:00pm,520,Monday,102

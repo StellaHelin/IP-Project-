@@ -3,7 +3,7 @@ import pandas as pd
 
 def home_page():
     while True:
-        print("""
+        print(r"""
 
                     __        __   _                            _           ____  _      _   _  ____  ____  _    _  ____     _
                     \ \      / /__| | ___ ___  _ __ ___   ___  | |_ ___    | __ )| |    | | | || ___|| __ )| |  | |/ ___|   | |   
@@ -107,11 +107,20 @@ def page_book():
     print()
     print(start_list)
     start=int(input("enter your start location option : "))
+    while start<0 or start>5:
+        print("invalid input! try again")
+        start=int(input("enter your start location option : "))
+        
     print()
     print(end_list)
     drop=int(input("enter your drop location option : "))
+    while drop<0 or drop>5:
+        print("invalid input!,try again")
+        drop=int(input("enter your drop location option : "))
+        
     
-    df=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.txt")
+    
+    df=pd.read_csv(r"C:\Users\Personal\gungun\IP-Project-\busdetail.txt")
     new_df=df[(df["start"] == start_list[start-1][2:]) & (df["end"] == end_list[drop-1][2:])]
     print()
     print("start location:",start_list[start-1][2:],"drop location:",end_list[drop-1][2:])
@@ -156,15 +165,15 @@ def page_book():
     
     df.loc[a,"tickets"]-=tickets
     
-    det=pd.DataFrame({"name":NAMES,"age":AGE,"sex":SEX,"phone.no":PHONE})
-    det.to_csv(r"E:\AnushkaProjecy\IP-Project-\bookings.csv",mode="a",header=False)
-    df.to_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.csv")
+    
+    
     
             
      
     #payment
     total_am=df.loc[a,"cost"]*tickets
     print("total amount to be paid:",total_am) 
+    print()
     pay=int(input("""enter which payment method you want to choose
     1.upi
     2.card
@@ -178,8 +187,18 @@ def page_book():
     else:
         print("invalid option, payment failed, try booking again")
         return;
-       
+        
+    
+    det=pd.DataFrame({"name":NAMES,"age":AGE,"sex":SEX,"phone.no":PHONE})
+    det["from"]=start_list[start-1][2:]
+    det["to"]=end_list[drop-1][2:]
+    det["bus_no."]=a
+    det["payment_method"]="upi" if pay==1 else "card"
+    det.to_csv(r"C:\Users\Personal\gungun\IP-Project-\bookings.csv",mode="a",header=False)
     print("ticket details are as follows:")
+    print(det)
+    
+    
     
     
         
@@ -225,10 +244,12 @@ We believe smart travel should be for everyone — and BlueBus is our step in th
 
 
 def page_exit():
-    print("""
+    print(r"""
              __   __                _                                          _      _                    __                           _  
              \ \ / /__ _  _ _ _    (_)___ _  _ _ _ _ _  ___ _  _   ___ _ _  __| |___ | |_  ___ _ _ ___    / _|___ _ _   _ _  _____ __ _| | 
               \ V / _ \ || | '_|   | / _ \ || | '_| ' \/ -_) || | / -_) ' \/ _` (_-< | ' \/ -_) '_/ -_)  |  _/ _ \ '_| | ' \/ _ \ V  V /_| 
                |_|\___/\_,_|_|    _/ \___/\_,_|_| |_||_\___|\_, | \___|_||_\__,_/__/ |_||_\___|_| \___|  |_| \___/_|   |_||_\___/\_/\_/(_)
                                  |__/                       |__/                                 """)
+
+
 home_page()
