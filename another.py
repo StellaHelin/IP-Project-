@@ -1,6 +1,9 @@
+from datetime import datetime
+import pandas as pd
+
 def home_page():
     while True:
-        print("""
+        print(r"""
 
                     __        __   _                            _           ____  _      _   _  ____  ____  _    _  ____     _
                     \ \      / /__| | ___ ___  _ __ ___   ___  | |_ ___    | __ )| |    | | | || ___|| __ )| |  | |/ ___|   | |   
@@ -92,7 +95,127 @@ def home_page():
         else:
             print("Invalid choice")
                    
+def page_book():
+    current_datetime = datetime.now()
+    print(datetime)
+    print("you are currently booking a ticket for tommorow ")
+    print(f"Today's date: {current_datetime.strftime('%Y-%m-%d')}")
+    
+    #destination
+    start_list=["1.Chennai","2.Bangalore","3.Mysore","4.Rameshwaram","5.Kanyakumari"]
+    end_list=["1.Chennai","2.Bangalore","3.Mysore","4.Rameshwaram","5.Kanyakumari"]
+    print()
+    print(start_list)
+    start=int(input("enter your start location option : "))
+    while start<0 or start>5:
+        print("invalid input! try again")
+        start=int(input("enter your start location option : "))
+        
+    print()
+    print(end_list)
+    drop=int(input("enter your drop location option : "))
+    while drop<0 or drop>5:
+        print("invalid input!,try again")
+        drop=int(input("enter your drop location option : "))
+        
+    
+    
+    df=pd.read_csv(r"C:\Users\Personal\gungun\IP-Project-\busdetail.txt")
+    new_df=df[(df["start"] == start_list[start-1][2:]) & (df["end"] == end_list[drop-1][2:])]
+    print()
+    print("start location:",start_list[start-1][2:],"drop location:",end_list[drop-1][2:])
+    print(new_df)
+    print()
+    a=int(input("enter the bus option you want to choose:"))
+    while a not in new_df.index:
+        print("invalid bus option")
+        a=int(input("enter the bus option you want to choose:"))
+        
+    #print(new_df.loc[a])
+    print()
+    #details
+    tickets=int(input("enter the no. of tickets you want to book:"))
+    NAMES=[]
+    AGE=[]
+    SEX=[]
+    PHONE=[]
+    while tickets>df.loc[a,"tickets"]:
+        print("not enough tickets, select fewer tickets")
+        tickets=int(input("enter the no. of tickets you want to book:"))
+    for i in range(1,tickets+1):
+            print("enter passenger",i," name :")
+            name=input()
+            print("enter passenger",i," age :")
+            age=int(input())
+            print("enter passenger",i," sex(M/F):")
+            sex=input()
+            while sex!="M" and sex!="F":
+                print("invalid input pls try again!")
+                sex=input()
+            print("enter passanger",i,"phone no.:")
+            ph=input()
+            while len(ph)>10 or len(ph)<10:
+                print("invalid input pls try booking again!")
+                ph=input()
+            NAMES.append(name)
+            AGE.append(age)
+            SEX.append(sex)
+            PHONE.append(ph)
+    #print(df.loc[a,"tickets"])
+    
+    df.loc[a,"tickets"]-=tickets
+    
+    
+    
+    
+            
+     
+    #payment
+    total_am=df.loc[a,"cost"]*tickets
+    print("total amount to be paid:",total_am) 
+    print()
+    pay=int(input("""enter which payment method you want to choose
+    1.upi
+    2.card
+    :"""))
+    if pay==1:
+        payment_method="upi"
+        print("payment succesful")
+    elif pay==2:
+        payment_method="card"
+        print("payment successful")
+    else:
+        print("invalid option, payment failed, try booking again")
+        return;
+        
+    
+    det=pd.DataFrame({"name":NAMES,"age":AGE,"sex":SEX,"phone.no":PHONE})
+    det["from"]=start_list[start-1][2:]
+    det["to"]=end_list[drop-1][2:]
+    det["bus_no."]=a
+    det["payment_method"]="upi" if pay==1 else "card"
+    det.to_csv(r"C:\Users\Personal\gungun\IP-Project-\bookings.csv",mode="a",header=False)
+    print("ticket details are as follows:")
+    print(det)
+    
+    
+    
+    
+        
+    
+    
+   
+       
+    
+    
 
+    
+
+    
+        
+
+
+  
 
 def page_about():
     print("""Welcome to BlueBus, your trusted companion for seamless and affordable bus travel.
@@ -121,10 +244,12 @@ We believe smart travel should be for everyone — and BlueBus is our step in th
 
 
 def page_exit():
-    print("""
+    print(r"""
              __   __                _                                          _      _                    __                           _  
              \ \ / /__ _  _ _ _    (_)___ _  _ _ _ _ _  ___ _  _   ___ _ _  __| |___ | |_  ___ _ _ ___    / _|___ _ _   _ _  _____ __ _| | 
               \ V / _ \ || | '_|   | / _ \ || | '_| ' \/ -_) || | / -_) ' \/ _` (_-< | ' \/ -_) '_/ -_)  |  _/ _ \ '_| | ' \/ _ \ V  V /_| 
                |_|\___/\_,_|_|    _/ \___/\_,_|_| |_||_\___|\_, | \___|_||_\__,_/__/ |_||_\___|_| \___|  |_| \___/_|   |_||_\___/\_/\_/(_)
                                  |__/                       |__/                                 """)
+
+
 home_page()
