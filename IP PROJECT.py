@@ -1,5 +1,11 @@
 import pandas as pd
 import numpy as np
+from datetime import datetime
+import random
+pd.set_option("display.max_rows", None)
+pd.set_option("display.max_columns", None)
+pd.set_option("display.width", None)
+pd.set_option("display.colheader_justify", "center")
 
 def home_page():
     while True:
@@ -18,7 +24,7 @@ def home_page():
 
         print("""
         1)Book a ticket
-        2)My booking/history
+        2)My booking
         3)Cancellation
         4)About us
         5)Reviews
@@ -47,7 +53,7 @@ def home_page():
                                                            |___/                                  |___/ """)
             page_booked()
         elif choice==3:
-            print(r"""                             ____                      _  _____ _      _        _   
+            print(r"""                            ____                      _  _____ _      _        _   
                                                  / ___|__ _ _ __   ___ ___ | ||_   _(_) ___| | _____| |_ 
                                                 | |   / _` | '_ \ / __/ _ \  |  | | | |/ __| |/ / _ \ __|
                                                 | |__| (_| | | | | (_|  __/  |  | | | | (__|   <  __/ |_ 
@@ -98,6 +104,293 @@ def home_page():
             print("Invalid choice")
                    
 
+
+#BOOKING
+
+def page_book():
+    current_datetime = datetime.now().date()
+    print("Today's date is",current_datetime.strftime("%d-%m-%Y"))
+    while True:
+        date_str = input("Please enter the date on which you would like to book your ticket (dd-mm-yyyy): ")
+        try:
+            booking_date = datetime.strptime(date_str, "%d-%m-%Y").date()
+        except ValueError:
+            print("⚠️ Invalid format! Please use dd-mm-yyyy.")
+            continue
+        if booking_date>current_datetime:
+            break
+        else:
+            print("Invalid date")
+    
+    print("You have chosen:", booking_date.strftime("%A, %d %B %Y"))
+
+
+    #destination
+    start_list=["1.Chennai","2.Bangalore","3.Mysore","4.Rameshwaram","5.Kanyakumari"]
+    end_list=["1.Chennai","2.Bangalore","3.Mysore","4.Rameshwaram","5.Kanyakumari"]
+    print()
+    start=int(input("""
+1-Chennai
+2-Banglore
+3-Mysore
+4-Rameshwaram
+5-Kanyakumari
+Enter your start location option : """))
+    while start<0 or start>5:
+        print("Invalid input! Try again")
+        start=int(input("Enter your start location option : "))
+            
+    print()
+    drop=int(input("""
+1-Chennai
+2-Banglore
+3-Mysore
+4-Rameshwaram
+5-Kanyakumari
+Enter your drop location option : """))
+    while drop<0 or drop>5:
+        print("Invalid input!,Try again")
+        drop=int(input("Enter your drop location option : "))
+    df=pd.read_csv(r"C:\Users\stell\OneDrive\Desktop\IP\busdetails.txt")
+    while True:
+        new_df=df[(df["Start"] == start_list[start-1][2:]) & (df["End"] == end_list[drop-1][2:])]
+        print()
+        print("Start location:",start_list[start-1][2:])
+        print("Drop location:",end_list[drop-1][2:])
+        print()
+        if new_df.empty:
+            print("⚠️ No buses available for this route. Please try a different start and drop location.")
+            start = int(input("""
+1-Chennai
+2-Banglore
+3-Mysore
+4-Rameshwaram
+5-Kanyakumari
+Enter your start location option : """))
+            while start < 1 or start > 5:
+                print("Invalid input! Try again.")
+                start = int(input("Enter your start location option : "))
+            drop = int(input("""
+1-Chennai
+2-Banglore
+3-Mysore
+4-Rameshwaram
+5-Kanyakumari
+Enter your drop location option : """))
+            while drop < 1 or drop > 5:
+                print("Invalid input! Try again.")
+                drop = int(input("Enter your drop location option : "))
+        else:
+            print(new_df)
+            print()
+            break
+        
+    a=int(input("Enter the bus option you want to choose : "))
+    while a not in new_df.index:
+        print("Invalid bus option")
+        a=int(input("Enter the bus option you want to choose : "))
+    print(new_df.loc[a])
+    print()
+
+    
+    #Passanger Details
+    tickets=int(input("Enter the no. of tickets you want to book : "))
+    NAMES=[]
+    AGE=[]
+    SEX=[]
+    PHONE=[]
+    CODE=[]
+    while tickets>df.loc[a,"Tickets"]:
+        print("The requested number of tickets exceeds availability. Kindly choose fewer tickets.")
+        tickets=int(input("Enter the no. of tickets you want to book : "))
+        print()
+    for i in range(1,tickets+1):
+        print("Enter passenger",i," Name : ")
+        name=input()
+        print("Enter passenger",i," Age : ")
+        age=int(input())
+        print("Enter passenger",i," Sex(M/F): ")
+        sex=input()
+        while sex!="M" and sex!="F" :
+            print("Invalid input pls try again!")
+            sex=input("Enter passenger",i," Sex(M/F):")
+        print("Enter passanger",i,"Phone no. : ")
+        ph=input()
+        while len(ph)>10 or len(ph)<10:
+            print("Invalid input pls try booking again!")
+            print("Enter passanger",i,"Phone no.:")
+            ph=input()
+            print()
+        NAMES.append(name)
+        AGE.append(age)
+        SEX.append(sex)
+        PHONE.append(ph)
+    det1=pd.DataFrame({"Name":NAMES,"Age":AGE,"Sex":SEX,"Phone.no":PHONE})
+    print(det1)
+    print()
+    confirm=input("To go ahead with the payment type Y : ")
+    if confirm=="Y" or confirm=="y":
+        print()
+        pass
+    else:
+        home_page()
+
+
+    #payment
+    total_am=df.loc[a,"Cost"]*tickets
+    print("Total amount to be paid:",total_am) 
+    print()
+    pay=int(input("""
+1.UPI
+2.Card
+Enter which payment method you want to use :  """))
+    if pay==1:
+        payment_method="upi"
+        print("Payment succesful")
+        code = random.randint(1000, 9999)
+        CODE=[code]*tickets
+        print()
+        print("Please keep this code safe to check additional information")
+        print(code)
+        input()
+    elif pay==2:
+        payment_method="card"
+        print("Payment successful")
+        code =random.randint(1000, 9999)
+        CODE=[code]*tickets
+        print()
+        print("Please keep this code safe to check additional information.")
+        print(code)
+        print()
+        input()
+    else:
+        print("Invalid option, payment failed, try booking again")
+        return
+    
+    det=pd.DataFrame({"Name":NAMES,"Age":AGE,"Sex":SEX,"Phone.no":PHONE,"Code":CODE})
+    det["From"]=start_list[start-1][2:]
+    det["To"]=end_list[drop-1][2:]
+    det["Bus_No."]=a
+    det["Payment_Method"]="UPI" if pay==1 else "Card"
+    det=det.set_index("Code")
+    det.to_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt",mode="a",header=False)
+    print("Ticket details are as follows:")
+    print()
+    print(det.to_string())
+    input()
+    print("Thank you! We wish you a comfortable and happy journey.")
+    input()
+    
+
+
+
+
+
+#MYBOOKING/HISTORY
+def page_booked():
+    num=int(input("Enter code : "))
+    print()
+    details=pd.read_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt",index_col="code")           
+    if num not in details.index:
+        print("⚠️ No booking found with this code.")
+        input()
+        return
+    booking=details.loc[[num]]
+    print("Booking details")
+    print()  
+    for _, row in booking.iterrows():
+        print("\n/==================== BUS TICKET ====================\\")
+        print(f"| Booking Code : {num:<35} |")
+        print(f"| Passenger    : {row['name']:<35} |")
+        print(f"| Age / Sex    : {row['age']} / {row['sex']:<30} |")
+        print(f"| Phone No.    : {row['phone.no']:<35} |")
+        print(f"| From → To    : {row['from']} → {row['to']:<27} |")
+        print(f"| Bus No.      : {row['bus_no']:<35} |")
+        print(f"| Payment      : {row['payment_method']:<35} |")
+        print("\\====================================================/\n")
+        print()
+    print("Press enter to return to homepage")
+    input()
+    
+    
+
+
+
+
+
+#CANCEL
+def page_cancel():
+    num=int(input("Enter code : "))
+    print()
+    details=pd.read_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt",index_col="code")           
+    if num not in details.index:
+        print("⚠️ No booking found with this code.")
+        return
+    booking=details.loc[[num]]
+    no_of_tickets=int(input("Enter how many tickets you would like to cancel : "))
+    while no_of_tickets>booking.shape[0]:
+        print("⚠️ Only", booking.shape[0] ,"ticket(s) exist for this booking. Please try again.")
+        no_of_tickets=int(input("Enter how many tickets you would like to cancel : "))
+    if no_of_tickets==booking.shape[0]:
+        print("Tickets")
+        print()  
+        for _, row in booking.iterrows():
+            print("\n/==================== BUS TICKET ====================\\")
+            print(f"| Booking Code : {num:<35} |")
+            print(f"| Passenger    : {row['name']:<35} |")
+            print(f"| Age / Sex    : {row['age']} / {row['sex']:<30} |")
+            print(f"| Phone No.    : {row['phone.no']:<35} |")
+            print(f"| From → To    : {row['from']} → {row['to']:<27} |")
+            print(f"| Bus No.      : {row['bus_no']:<35} |")
+            print(f"| Payment      : {row['payment_method']:<35} |")
+            print("\\====================================================/\n")
+            print()
+        confirm=input("Press Y to confirm cancellation or press any key to abort : ")
+        if confirm=="Y" or confirm=="y":
+            details=details.drop(num)
+            details.to_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt")
+            print()
+            print("✅ Your ticket(s) have been successfully cancelled. Thank you for using BlueBus! Refund will be processed shortly.")
+            input("Press enter to return to homepage")
+        else:
+            return
+    else:
+        print("Tickets")
+        print()  
+        for _, row in booking.iterrows():
+            print("\n/==================== BUS TICKET ====================\\")
+            print(f"| Booking Code : {num:<35} |")
+            print(f"| Passenger    : {row['name']:<35} |")
+            print(f"| Age / Sex    : {row['age']} / {row['sex']:<30} |")
+            print(f"| Phone No.    : {row['phone.no']:<35} |")
+            print(f"| From → To    : {row['from']} → {row['to']:<27} |")
+            print(f"| Bus No.      : {row['bus_no']:<35} |")
+            print(f"| Payment      : {row['payment_method']:<35} |")
+            print("\\====================================================/\n")
+            print()
+        for i in range(no_of_tickets):
+            while True:
+                name=input(f"Enter name of passenger #{i+1} to cancel : ")
+                if name not in booking['name'].values:
+                    print("⚠️ Name not found in this booking. Try again.")
+                else:
+                    details = details.drop(details[details['name'] == name].index)
+                    break
+        details.to_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt")
+        print()
+        print("✅ Your ticket(s) have been successfully cancelled. Thank you for using BlueBus! Refund will be processed shortly.")
+        input("Press enter to return to homepage")
+
+        
+        
+        
+    
+    
+
+
+
+
+
 # ABOUT US
 def page_about():
     print("""Welcome to BlueBus, your trusted companion for seamless and affordable bus travel.
@@ -120,7 +413,12 @@ This project is a part of our learning journey in software development — combi
 
 We believe smart travel should be for everyone — and BlueBus is our step in that direction.""")
     print()
-    input("Please press enter to go back")
+    input("Press enter to return to homepage")
+
+
+
+
+
 
 #REVIEWS
 def reviews():
@@ -145,13 +443,26 @@ def reviews():
             reviews()
 #Give reviews
 def give_review():
-    name=input("Enter yout name : ")
-    rate=int(input("Rate your experience (1-5): "))
-    if 1<=rate<=5:
-        rate="⭐"*rate
-    else:
-        print("Please enter a rating between 1 and 5.")
-        return give_review()
+    while True:
+        num=int(input("Enter code : "))
+        details=pd.read_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt",index_col="code") 
+        if num not in details.index:
+            print("⚠️ You cannot give a review because no booking was found with this code.")
+            choice= int(input("Enter 1 to try again else enter any other number : "))
+            if choice!=1:
+                return
+            else:
+                continue
+        else:
+            break
+    name=input("Enter your name : ")
+    while True:
+        rate=int(input("Rate your experience (1-5): "))
+        if 1<=rate<=5:
+            rate="⭐"*rate
+            break
+        else:
+            print("Please enter a rating between 1 and 5.")
     description=input("Enter your review :")
     print()
     print("Rating : ",rate)
@@ -161,7 +472,7 @@ def give_review():
     confirm(rate,name,description)
 def confirm(rate,name,description):
         choice3=input("Confirm details ? Y/N : ")
-        if choice3=="Y":
+        if choice3=="Y" or choice3=="y":
             d={"Rating":[rate],"Name":[name],"Review":[description]}
             df=pd.DataFrame(d)
             df.to_csv(r"C:\Users\stell\OneDrive\Desktop\IP\review.csv",header=False,mode="a",index=False)
@@ -170,8 +481,10 @@ def confirm(rate,name,description):
             print()
             input("Press enter to return to homepage")
             print()
-        elif choice3=="N":
-            return give_review()
+        elif choice3=="N" or choice3=="n":
+            print("Press enter to return to homepage")
+            input()
+            return 
         else:
             print("Invalid choice")
             print()
@@ -191,6 +504,10 @@ def read_reviews():
     input("Press enter to return to homepage")
 
 
+
+
+
+
 #HELP
 def page_help():
     print()
@@ -205,6 +522,11 @@ For any queries related to booking, cancellation, or payments, feel free to call
 Press enter to return to the homepage.
 """)
     input()
+
+
+
+
+
 #Exit    
 def page_exit():
     print("""
