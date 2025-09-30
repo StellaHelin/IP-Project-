@@ -8,6 +8,7 @@ pd.set_option("display.width", None)
 pd.set_option("display.colheader_justify", "center")
 
 def home_page():
+   
     while True:
         print("""
 
@@ -151,7 +152,7 @@ Enter your drop location option : """))
     while drop<0 or drop>5:
         print("Invalid input!,Try again")
         drop=int(input("Enter your drop location option : "))
-    df=pd.read_csv(r"C:\Users\stell\OneDrive\Desktop\IP\busdetails.txt")
+    df=pd.read_csv(r"C:\Users\Personal\gungun\IP-Project-\busdetail.txt",index_col="Bus_no")
     while True:
         new_df=df[(df["Start"] == start_list[start-1][2:]) & (df["End"] == end_list[drop-1][2:])]
         print()
@@ -185,7 +186,7 @@ Enter your drop location option : """))
             print()
             break
         
-    a=int(input("Enter the bus option you want to choose : "))
+    a=input("Enter the bus_no you want to choose : ").upper()
     while a not in new_df.index:
         print("Invalid bus option")
         a=int(input("Enter the bus option you want to choose : "))
@@ -210,10 +211,12 @@ Enter your drop location option : """))
         print("Enter passenger",i," Age : ")
         age=int(input())
         print("Enter passenger",i," Sex(M/F): ")
-        sex=input()
+        sex=input().upper()
         while sex!="M" and sex!="F" :
+            
             print("Invalid input pls try again!")
-            sex=input("Enter passenger",i," Sex(M/F):")
+            sex=input(f"Enter passenger {i} Sex(M/F):")
+            
         print("Enter passanger",i,"Phone no. : ")
         ph=input()
         while len(ph)>10 or len(ph)<10:
@@ -273,11 +276,12 @@ Enter which payment method you want to use :  """))
     det["Bus_No."]=a
     det["Payment_Method"]="UPI" if pay==1 else "Card"
     det=det.set_index("Code")
-    det.to_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt",mode="a",header=False)
+    det.to_csv(r"C:\Users\Personal\gungun\IP-Project-\booking.txt",mode="a",header=False)
     print("Ticket details are as follows:")
     print()
     print(det.to_string())
     input()
+    print("total amount payed is",total_am)
     print("Thank you! We wish you a comfortable and happy journey.")
     input()
     
@@ -535,6 +539,139 @@ def page_exit():
               \ V / _ \ || | '_|   | / _ \ || | '_| ' \/ -_) || | / -_) ' \/ _` (_-< | ' \/ -_) '_/ -_)  |  _/ _ \ '_| | ' \/ _ \ V  V /_| 
                |_|\___/\_,_|_|    _/ \___/\_,_|_| |_||_\___|\_, | \___|_||_\__,_/__/ |_||_\___|_| \___|  |_| \___/_|   |_||_\___/\_/\_/(_)
                                  |__/                       |__/                                 """)
-home_page()
+def admin():
+    adm_phone=9535044904
+    adm_password="bluebuzz08"
+    mob=int(input("enter your mobile number: "))
+    password=input("enter your admin login password: ")
+    if mob!=adm_phone or password!=adm_password:
+         print("""invalid input
+         please verify your data again""")
+         start()
+    else:
+        e=pd.read_csv(r"C:\Users\Personal\gungun\IP-Project-\busdetail.txt",index_col="Bus_no")
+        start_list=["chennai","bangalore","mysore","rameshwaram","kanyakumari"]
+        end_list=["chennai","bangalore","mysore","rameshwaram","kanyakumari"]
+        while True:
+            print("""options:
+            1.adding buses
+            2.deleting buses
+            3.modifying the number of tickets 
+            4.view
+            5.exit""")
+            op=int(input("enter your option:"))
+            if op==4:
+                print(e)
+            elif op==1:
+                z=input("enter the bus_no: ")
+                z=z.upper()
+                while z in e.index:
+                    print("invalid input")
+                    z=input("enter the bus_no: ")
+                    z=z.upper()
+                l=[]
+                
+                f=input("enter start location: ").lower()
+                while f not in start_list:
+                    print("start location does not belong in original data set")
+                    f=input("enter start location: ")
+                l.append(f)
+                
+                d=input("enter drop location: ").lower()
+                while d not in end_list:
+                    print("drop location does not belong in original data set")
+                    d=input("enter drop location: ")
+                l.append(d)
+                 
+                n=input("enter agency name: ")
+                l.append(n)
+                
+                t=input("enter time(hh:mm(am/pm)): ")
+                l.append(t)
+                
+                c=int(input("enter cost of one ticket: "))
+                l.append(c)
+                
+                day=input("enter the day of boarding: ")
+                l.append(day)
+                
+                tick=int(input("enter the total no. of tickets available in the bus: "))
+                l.append(tick)
+               
+                
+                e.loc[z,:]=l
+                print()
+                print(e)
+                
+            elif op==2:
+                d=input("enter the bus_no you want to delete:")
+                d=d.upper()
+                while d not in e.index:
+                    print("invalid input")
+                    d=input("enter the bus_no you want to delete:")
+                    d=d.upper()
+                e.drop([d],inplace=True)
+                print()
+                print(e)
+                
+                
+            elif op==3:
+                z=input("enter the bus_no: ")
+                z=z.upper()
+                n=int(input("enter what you want to change the no of tickects to: "))
+                while z not in e.index:
+                    print("invalid input")
+                    z=input("enter the bus_no: ")
+                    z=z.upper()
+                e.loc[z,"Tickets"]=n
+                print()
+                print(e)
 
+                
+            elif op==5:
+                
+                choice=input("do you want to save the changes?(y/n)").lower()
+                if choice == "y":
+                    e.to_csv(r"C:\Users\Personal\gungun\IP-Project-\busdetail.txt")
+                break
+            else:
+                print("invalid input")
+                print("""options:
+                1.adding buses
+                2.deleting buses
+                3.modifying the number of tickets 
+                4.view""")
+                op=int(input("enter your option: "))
+                
+                
+            
+            
+            
+     
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+def start():
+    print("""how would you like to explore today:
+        1.admin
+        2.user""")
+    print()
+    ch=int(input("enter your choice: "))
+    if ch==1:
+        admin()
+            
+    elif ch==2:
+        home_page()
+    else:
+        print("invalid input")
+        start()
+start()
 
