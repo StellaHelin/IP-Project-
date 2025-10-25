@@ -10,7 +10,7 @@ pd.set_option("display.colheader_justify", "center")
 def home_page():
    
     while True:
-        print("""
+        print(r"""
 
                     __        __   _                            _           ____  _      _   _  ____  ____  _    _  ____     _
                     \ \      / /__| | ___ ___  _ __ ___   ___  | |_ ___    | __ )| |    | | | || ___|| __ )| |  | |/ ___|   | |   
@@ -54,7 +54,8 @@ def home_page():
                                                            |___/                                  |___/ """)
             page_booked()
         elif choice==3:
-            print(r"""                            ____                      _  _____ _      _        _   
+            print(r"""
+                                                  ____                      _  _____ _      _        _   
                                                  / ___|__ _ _ __   ___ ___ | ||_   _(_) ___| | _____| |_ 
                                                 | |   / _` | '_ \ / __/ _ \  |  | | | |/ __| |/ / _ \ __|
                                                 | |__| (_| | | | | (_|  __/  |  | | | | (__|   <  __/ |_ 
@@ -152,7 +153,7 @@ Enter your drop location option : """))
     while drop<0 or drop>5:
         print("Invalid input!,Try again")
         drop=int(input("Enter your drop location option : "))
-    df=pd.read_csv(r"C:\Users\Personal\gungun\IP-Project-\busdetail.txt",index_col="Bus_no")
+    df=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt",index_col="Bus_no")
     while True:
         new_df=df[(df["Start"] == start_list[start-1][2:]) & (df["End"] == end_list[drop-1][2:])]
         print()
@@ -189,7 +190,7 @@ Enter your drop location option : """))
     a=input("Enter the bus_no you want to choose : ").upper()
     while a not in new_df.index:
         print("Invalid bus option")
-        a=int(input("Enter the bus option you want to choose : "))
+        a=input("Enter the bus option you want to choose : ").upper()
     print(new_df.loc[a])
     print()
 
@@ -276,12 +277,12 @@ Enter which payment method you want to use :  """))
     det["Bus_No."]=a
     det["Payment_Method"]="UPI" if pay==1 else "Card"
     det=det.set_index("Code")
-    det.to_csv(r"C:\Users\Personal\gungun\IP-Project-\booking.txt",mode="a",header=False)
+    det.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",mode="a",header=False)
     print("Ticket details are as follows:")
     print()
     print(det.to_string())
     input()
-    print("total amount payed is",total_am)
+    print("Total amount payed is",total_am)
     print("Thank you! We wish you a comfortable and happy journey.")
     input()
     
@@ -294,7 +295,7 @@ Enter which payment method you want to use :  """))
 def page_booked():
     num=int(input("Enter code : "))
     print()
-    details=pd.read_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt",index_col="code")           
+    details=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",index_col="code")           
     if num not in details.index:
         print("⚠️ No booking found with this code.")
         input()
@@ -326,7 +327,7 @@ def page_booked():
 def page_cancel():
     num=int(input("Enter code : "))
     print()
-    details=pd.read_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt",index_col="code")           
+    details=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",index_col="code")           
     if num not in details.index:
         print("⚠️ No booking found with this code.")
         return
@@ -352,7 +353,7 @@ def page_cancel():
         confirm=input("Press Y to confirm cancellation or press any key to abort : ")
         if confirm=="Y" or confirm=="y":
             details=details.drop(num)
-            details.to_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt")
+            details.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt")
             print()
             print("✅ Your ticket(s) have been successfully cancelled. Thank you for using BlueBus! Refund will be processed shortly.")
             input("Press enter to return to homepage")
@@ -378,9 +379,17 @@ def page_cancel():
                 if name not in booking['name'].values:
                     print("⚠️ Name not found in this booking. Try again.")
                 else:
-                    details = details.drop(details[details['name'] == name].index)
+                    matching_rows = booking[booking['name'] == name]
+                    if matching_rows.empty:
+                        print("⚠️ No exact match found in full data (code + name).")
+                    else:
+                       details_reset = details.reset_index()
+                       # 2. Drop only the row that matches code + name
+                       details_reset = details_reset[~((details_reset["code"] == num) & (details_reset["name"] == name))]
+                       # 3. Set 'code' back as the index
+                       details = details_reset.set_index("code")
                     break
-        details.to_csv(r"C:\Users\stell\OneDrive\Desktop\IP\booking.txt")
+        details.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt")
         print()
         print("✅ Your ticket(s) have been successfully cancelled. Thank you for using BlueBus! Refund will be processed shortly.")
         input("Press enter to return to homepage")
@@ -533,7 +542,7 @@ Press enter to return to the homepage.
 
 #Exit    
 def page_exit():
-    print("""
+    print(r"""
              __   __                _                                          _      _                    __                           _  
              \ \ / /__ _  _ _ _    (_)___ _  _ _ _ _ _  ___ _  _   ___ _ _  __| |___ | |_  ___ _ _ ___    / _|___ _ _   _ _  _____ __ _| | 
               \ V / _ \ || | '_|   | / _ \ || | '_| ' \/ -_) || | / -_) ' \/ _` (_-< | ' \/ -_) '_/ -_)  |  _/ _ \ '_| | ' \/ _ \ V  V /_| 
