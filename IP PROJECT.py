@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from tabulate import tabulate
 import random
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
@@ -150,7 +151,7 @@ Enter your drop location option : """))
     while drop<0 or drop>5:
         print("Invalid input!,Try again")
         drop=int(input("Enter your drop location option : "))
-    df=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt",index_col="Bus_no")
+    df=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.txt",index_col="Bus_no")
     while True:
         new_df=df[(df["Start"] == start_list[start-1][2:]) & (df["End"] == end_list[drop-1][2:])]
         print()
@@ -180,7 +181,9 @@ Enter your drop location option : """))
                 print("Invalid input! Try again.")
                 drop = int(input("Enter your drop location option : "))
         else:
-            print(new_df)
+            #print(new_df)
+            print(tabulate(new_df, headers='keys', tablefmt='psql'))
+
             print()
             break
         
@@ -188,7 +191,8 @@ Enter your drop location option : """))
     while a not in new_df.index:
         print("Invalid bus option")
         a=input("Enter the bus option you want to choose : ").upper()
-    print(new_df.loc[a])
+    #print(new_df.loc[a])
+    print(tabulate(new_df.loc[[a]], headers='keys', tablefmt='psql'))
     print()
 
     
@@ -218,6 +222,10 @@ Enter your drop location option : """))
             
         print("Enter passanger",i,"Phone no. : ")
         ph=input()
+        while not ph.isdigit():
+            print("please enter a valid 10 digit number...")
+            ph=input()
+            print()
         while len(ph)>10 or len(ph)<10:
             print("Invalid input pls try booking again!")
             print("Enter passanger",i,"Phone no.:")
@@ -228,7 +236,8 @@ Enter your drop location option : """))
         SEX.append(sex)
         PHONE.append(ph)
     det1=pd.DataFrame({"Name":NAMES,"Age":AGE,"Sex":SEX,"Phone.no":PHONE})
-    print(det1)
+    #print(det1)
+    print(tabulate(det1, headers='keys', tablefmt='psql'))
     print()
     confirm=input("To go ahead with the payment type Y : ")
     if confirm=="Y" or confirm=="y":
@@ -276,10 +285,11 @@ Enter which payment method you want to use :  """))
     det["Bus_No."]=a
     det["Payment_Method"]="UPI" if pay==1 else "Card"
     det=det.set_index("Code")
-    det.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",mode="a",header=False)
+    det.to_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt",mode="a",header=False)
     print("Ticket details are as follows:")
     print()
-    print(det.to_string())
+    #print(det.to_string())
+    print(tabulate(det,headers='rows', tablefmt='psql'))
     input()
     print("Total amount payed is",total_am)
     print("Thank you! We wish you a comfortable and happy journey.")
@@ -294,7 +304,7 @@ Enter which payment method you want to use :  """))
 def page_booked():
     num=int(input("Enter code : "))
     print()
-    details=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",index_col="code")           
+    details=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt",index_col="code")           
     if num not in details.index:
         print("⚠️ No booking found with this code.")
         input()
@@ -326,7 +336,7 @@ def page_booked():
 def page_cancel():
     num=int(input("Enter code : "))
     print()
-    details=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",index_col="code")           
+    details=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt",index_col="code")           
     if num not in details.index:
         print("⚠️ No booking found with this code.")
         return
@@ -352,7 +362,7 @@ def page_cancel():
         confirm=input("Press Y to confirm cancellation or press any key to abort : ")
         if confirm=="Y" or confirm=="y":
             details=details.drop(num)
-            details.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt")
+            details.to_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt")
             print()
             print("✅ Your ticket(s) have been successfully cancelled. Thank you for using BlueBus! Refund will be processed shortly.")
             input("Press enter to return to homepage")
@@ -388,7 +398,7 @@ def page_cancel():
                        # 3. Set 'code' back as the index
                        details = details_reset.set_index("code")
                     break
-        details.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt")
+        details.to_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt")
         print()
         print("✅ Your ticket(s) have been successfully cancelled. Thank you for using BlueBus! Refund will be processed shortly.")
         input("Press enter to return to homepage")
@@ -457,7 +467,7 @@ def reviews():
 def give_review():
     while True:
         num=int(input("Enter code : "))
-        details=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",index_col="code")
+        details=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt",index_col="code")
         if num not in details.index:
             print("⚠️ You cannot give a review because no booking was found with this code.")
             choice= int(input("Enter 1 to try again else enter any other number : "))
@@ -549,16 +559,20 @@ def page_exit():
                                  |__/                       |__/                                 """)
     
 def admin():
-    adm_phone=9535044904
+    adm_phone="9535044904"
     adm_password="bluebuzz08"
-    mob=int(input("Enter your mobile number: "))
+    mob=input("Enter your mobile number: ")
+    while not mob.isdigit() or len(mob)!=10:
+        print("enter valid 10 digit mobile number")
+        mob=input("Enter your mobile number: ")
     password=input("Enter your admin login password: ")
     if mob!=adm_phone or password!=adm_password:
          print("""Invalid input
          Please verify your data again""")
+         #print(mob,adm_phone)
          start()
     else:
-        e=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt",index_col="Bus_no")
+        e=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.txt",index_col="Bus_no")
         start_list=["chennai","bangalore","mysore","rameshwaram","kanyakumari"]
         end_list=["chennai","bangalore","mysore","rameshwaram","kanyakumari"]
         while True:
@@ -570,7 +584,86 @@ def admin():
             5.Exit""")
             op=int(input("Enter your option:"))
             if op==4:
-                print(e)
+                x=input("enter the start location you want to access (All/filtered values):")
+                x=x.split(",")
+                #print(x,"\n\n\n")
+                i=0
+                while i<len(x):
+                    while x[i]!="All" and (x[i].lower() not in start_list) or not x[i][0].isupper():
+                            print("""error!
+check your input and its case(starting letter of cities must be capital!!)""")
+                            print("the error is in input",x[i])
+                            print()
+                            x=input("enter the start location you want to access (All/filtered values):")
+                            x=x.split(",")
+                            i=0
+                    i+=1
+                if x[0]=="All":
+                    x=e["Start"]
+                
+                if type(x) is list:
+                    d = e[e["Start"].isin(x)]
+                else:
+                    d=e[e.loc[:,"Start"]==x]
+                print()
+                
+                
+                y=input("enter the end location you want to access(All/filtered values):")
+                y=y.split(",")
+                i=0
+                while i<len(y):
+                    while y[i]!="All" and (y[i].lower() not in end_list) or not x[i][0].isupper():
+                            print("""error!
+check your input and its case(starting letter of cities must be capital!!)""")
+                            print("the error is in input",x[i])
+                            print()
+                            y=input("enter the end location you want to access (All/filtered values):")
+                            y=y.split(",")
+                            i=0
+                    i+=1
+                if y[0]=="All":
+                    y=d["End"]
+                if type(y) is list:
+                     b=d[d.loc[:,"End"].isin(y)]
+                else:
+                    b=d[d.loc[:,"End"]==y]
+                print()
+                
+                
+                t=input("enter the travel agency you want to access(All/filtered):")
+                t=t.split(",")
+                i=0
+                
+                while i<len(t):
+                    while t[i]!="All" and t[i].lower() not in e["Name"].values:
+                            print("""error!
+check your input and its case""")
+                            print()
+                            t=input("enter the travel agency you want to access(All/filtered):")
+                            t=t.split(",")
+                            i=0
+                    i=i+1
+                if t[0]=="All":
+                    t=b["Name"]
+                if type(t) is list:
+                    c=b[b.loc[:,"Name"].isin(t)]
+                else:
+                    c=b[b.loc[:,"Name"]==t]
+                print()
+                
+                
+                z=input("enter the day you want to access(All/filtered):")
+                while z!="All" and z.lower() not in e["Day"].values or not z[0].isupper():
+                        print("""error!
+check your input and its case(starting letter of Days must be capital!!)""")
+                        z=input("enter the day you want to access(All/filtered):")
+                if z=="All":
+                    z=c["Day"]
+                r=c[c.loc[:,"Day"]==z]
+                print()
+                
+                
+                print(tabulate(r, headers='keys', tablefmt='psql'))
                 input()
             elif op==1:
                 z=input("Enter the bus_no: ")
@@ -639,7 +732,7 @@ def admin():
 
                 
             elif op==5:
-                    e.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt")
+                    e.to_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.txt")
                     start()
             
             else:
@@ -685,15 +778,16 @@ def start():
         2.User
         3.Exit""")
     print()
-    ch=int(input("Enter your choice: "))
-    if ch==1:
+    
+    ch=input("Enter your choice: ")
+    if ch=='1':
         admin()
             
-    elif ch==2:
+    elif ch=='2':
         home_page()
-    elif ch==3:
+    elif ch=='3':
             page_exit()
-            #FIGURE OUT THE FUNCTION TO STOP THE ENTIRE PROGRAM 
+             
 
     else:
         print("Invalid input")
