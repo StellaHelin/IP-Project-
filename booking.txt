@@ -5,3 +5,5 @@ code,name,age,sex,phone.no,from,to,bus_no,payment_method
 1145,CD,66,F,4657835462,Mysore,Kanyakumari,M8101,Card
 7431,AB,55,M,3452685346,Rameshwaram,Chennai,R6101,Card
 7431,DD,66,F,2438634745,Rameshwaram,Chennai,R6101,Card
+4922,BB,33,F,6475837485,Bangalore,Kanyakumari,B9801,UPI
+3339,A,44,M,3425673452,Mysore,Kanyakumari,M8105,UPI
