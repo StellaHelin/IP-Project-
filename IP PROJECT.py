@@ -97,32 +97,31 @@ def home_page():
 
 def page_book():
     current_datetime = datetime.now().date()
-    print("Today's date is",current_datetime.strftime("%d-%m-%Y"))
+    print("Today's date is", current_datetime.strftime("%d-%m-%Y"))
     while True:
         date_str = input("Please enter the date on which you would like to book your ticket (dd-mm-yyyy): ")
         try:
             booking_date = datetime.strptime(date_str, "%d-%m-%Y").date()
-            #cur_month=int(current_datetime.strftime("%m"))
-            #m=cur_month+3
-            #book_month=int(datetime.strptime(date_str,"%m"))
-            
-            
-            
         except ValueError:
-            print("⚠️ Invalid format! Please use dd-mm-yyyy.")
+                print("⚠️ Invalid format! Please use dd-mm-yyyy.")
+                continue
+        if booking_date < current_datetime:
+                print("❌ Cannot book past dates.")
+                continue
+
+        year_diff = booking_date.year - current_datetime.year
+        month_diff = year_diff * 12 + (booking_date.month - current_datetime.month)
+        if month_diff > 3:
+            print("❌ Booking not allowed beyond 3 months.")
             continue
-        if booking_date>current_datetime:
-            break
-       
-        #if book_month>m:
-            #print("invalid booking,booking possible")
-        
-            
-            
-                
-        
-    
+        elif month_diff == 3 and booking_date.day > current_datetime.day:
+            print("❌ Booking not allowed beyond 3 months.")
+            continue
+
+        break
+
     print("You have chosen:", booking_date.strftime("%A, %d %B %Y"))
+
 
 
     #destination
@@ -151,7 +150,7 @@ Enter your drop location option : """))
     while drop<0 or drop>5:
         print("Invalid input!,Try again")
         drop=int(input("Enter your drop location option : "))
-    df=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.txt",index_col="Bus_no")
+    df=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt",index_col="Bus_no")
     while True:
         new_df=df[(df["Start"] == start_list[start-1][2:]) & (df["End"] == end_list[drop-1][2:])]
         print()
@@ -204,6 +203,8 @@ Enter your drop location option : """))
     SEX=[]
     PHONE=[]
     CODE=[]
+    minors=0
+    adults=0
     while tickets>df.loc[a,"Tickets"]:
         print("The requested number of tickets exceeds availability. Kindly choose fewer tickets.")
         tickets=int(input("Enter the no. of tickets you want to book : "))
@@ -212,14 +213,24 @@ Enter your drop location option : """))
         print("Enter passenger",i," Name : ")
         name=input()
         print("Enter passenger",i," Age : ")
-        age=int(input())
+        while True:
+            try:
+                age = int(input())
+                if age > 0:
+                    break
+                else:
+                    print("Invalid age. Try again.")
+            except:
+                print("Invalid age. Try again.")
+        if age<16:
+            minors+=1
+        if age>=18:
+            adults+=1
         print("Enter passenger",i," Sex(M/F): ")
         sex=input().upper()
         while sex!="M" and sex!="F" :
-            
             print("Invalid input pls try again!")
-            sex=input(f"Enter passenger {i} Sex(M/F):")
-            
+            sex=input(f"Enter passenger {i} Sex(M/F):").upper()
         print("Enter passanger",i,"Phone no. : ")
         ph=input()
         while not ph.isdigit():
@@ -235,6 +246,11 @@ Enter your drop location option : """))
         AGE.append(age)
         SEX.append(sex)
         PHONE.append(ph)
+    if minors>0 and adults==0:
+        print("\nBooking not allowed. A passenger under 16 MUST have an accompanying passenger aged 18 or above.\n")
+        input()
+        home_page()
+        return
     det1=pd.DataFrame({"Name":NAMES,"Age":AGE,"Sex":SEX,"Phone.no":PHONE})
     #print(det1)
     print(tabulate(det1, headers='keys', tablefmt='psql'))
@@ -285,7 +301,7 @@ Enter which payment method you want to use :  """))
     det["Bus_No."]=a
     det["Payment_Method"]="UPI" if pay==1 else "Card"
     det=det.set_index("Code")
-    det.to_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt",mode="a",header=False)
+    det.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",mode="a",header=False)
     print("Ticket details are as follows:")
     print()
     #print(det.to_string())
@@ -304,7 +320,7 @@ Enter which payment method you want to use :  """))
 def page_booked():
     num=int(input("Enter code : "))
     print()
-    details=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt",index_col="code")           
+    details=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",index_col="code")           
     if num not in details.index:
         print("⚠️ No booking found with this code.")
         input()
@@ -336,7 +352,7 @@ def page_booked():
 def page_cancel():
     num=int(input("Enter code : "))
     print()
-    details=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt",index_col="code")           
+    details=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",index_col="code")           
     if num not in details.index:
         print("⚠️ No booking found with this code.")
         return
@@ -362,7 +378,7 @@ def page_cancel():
         confirm=input("Press Y to confirm cancellation or press any key to abort : ")
         if confirm=="Y" or confirm=="y":
             details=details.drop(num)
-            details.to_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt")
+            details.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt")
             print()
             print("✅ Your ticket(s) have been successfully cancelled. Thank you for using BlueBus! Refund will be processed shortly.")
             input("Press enter to return to homepage")
@@ -393,12 +409,10 @@ def page_cancel():
                         print("⚠️ No exact match found in full data (code + name).")
                     else:
                        details_reset = details.reset_index()
-                       # 2. Drop only the row that matches code + name
                        details_reset = details_reset[~((details_reset["code"] == num) & (details_reset["name"] == name))]
-                       # 3. Set 'code' back as the index
                        details = details_reset.set_index("code")
                     break
-        details.to_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt")
+        details.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt")
         print()
         print("✅ Your ticket(s) have been successfully cancelled. Thank you for using BlueBus! Refund will be processed shortly.")
         input("Press enter to return to homepage")
@@ -467,7 +481,7 @@ def reviews():
 def give_review():
     while True:
         num=int(input("Enter code : "))
-        details=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\booking.txt",index_col="code")
+        details=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt",index_col="code")
         if num not in details.index:
             print("⚠️ You cannot give a review because no booking was found with this code.")
             choice= int(input("Enter 1 to try again else enter any other number : "))
@@ -572,7 +586,7 @@ def admin():
          #print(mob,adm_phone)
          start()
     else:
-        e=pd.read_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.txt",index_col="Bus_no")
+        e=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt",index_col="Bus_no")
         start_list=["chennai","bangalore","mysore","rameshwaram","kanyakumari"]
         end_list=["chennai","bangalore","mysore","rameshwaram","kanyakumari"]
         while True:
@@ -581,7 +595,8 @@ def admin():
             2.Deleting buses
             3.Modifying the number of tickets 
             4.View
-            5.Exit""")
+            5.Sales Report
+            6.Exit""")
             op=int(input("Enter your option:"))
             if op==4:
                 x=input("enter the start location you want to access (All/filtered values):")
@@ -729,12 +744,15 @@ check your input and its case(starting letter of Days must be capital!!)""")
                 e.loc[z,"Tickets"]=n
                 print()
                 print("✅ The number of tickets have been successfully modified.")
-
-                
-            elif op==5:
-                    e.to_csv(r"E:\AnushkaProjecy\IP-Project-\busdetail.txt")
+            elif op==6:
+                    e.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt")
                     start()
-            
+            elif op==5:
+                #“Ticket Statistics”
+                #“Sales Report”
+                #“Booking Analytics”
+                #“Admin Dashboard”
+                pass
             else:
                 print("Invalid input")
                 print("""Options:
@@ -742,7 +760,8 @@ check your input and its case(starting letter of Days must be capital!!)""")
                 2.Deleting buses
                 3.Modifying the number of tickets 
                 4.View
-                5.Exit""")
+                5.Sales Report
+                6.Exit""")
                 op=int(input("Enter your option: "))
                 
                 
