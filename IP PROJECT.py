@@ -3,13 +3,21 @@ import numpy as np
 from datetime import datetime
 from tabulate import tabulate
 import random
+import matplotlib.pyplot as plt
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", None)
 pd.set_option("display.colheader_justify", "center")
 
 def home_page():
-    #HOME PUT NICELY 
+    print(r"""
+                                                                 _   _  ___  __  __ _____  
+                                                                | | | |/ _ \|  \/  | ____| 
+                                                                | |_| | | | | |\/| |  _|   
+                                                                |  _  | |_| | |  | | |___  
+                                                                |_| |_|\___/|_|  |_|_____| 
+
+                            """) 
    
     while True:
         print()
@@ -196,7 +204,6 @@ Enter your drop location option : """))
 
     
     #Passanger Details
-    #if errror occurs it shud give message and not stop the code for everything 
     tickets=int(input("Enter the no. of tickets you want to book : "))
     NAMES=[]
     AGE=[]
@@ -585,20 +592,39 @@ def admin():
          Please verify your data again""")
          #print(mob,adm_phone)
          start()
-    else:
+    else:                         
         e=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt",index_col="Bus_no")
         start_list=["chennai","bangalore","mysore","rameshwaram","kanyakumari"]
         end_list=["chennai","bangalore","mysore","rameshwaram","kanyakumari"]
         while True:
+            print(r"""
+                                                                     _    ____  __  __ ___ _   _ 
+                                                                    / \  |  _ \|  \/  |_ _| \ | |
+                                                                   / _ \ | | | | |\/| || ||  \| |
+                                                                  / ___ \| |_| | |  | || || |\  |
+                                                                 /_/   \_\____/|_|  |_|___|_| \_|
+                                                                 """)
+            print()
             print("""Options:
             1.Adding buses
             2.Deleting buses
             3.Modifying the number of tickets 
             4.View
-            5.Sales Report
+            5.Ticket Statistics
             6.Exit""")
             op=int(input("Enter your option:"))
+            print()
             if op==4:
+                print()
+                print(r"""
+                                                                 __     _____ _______        __
+                                                                 \ \   / /_ _| ____\ \      / /
+                                                                  \ \ / / | ||  _|  \ \ /\ / / 
+                                                                   \ V /  | || |___  \ V  V /  
+                                                                    \_/  |___|_____|  \_/\_/   
+                               """)
+                
+                                                      
                 x=input("Enter the start location you want to access (All/filtered values):")
                 x=x.split(",")
                 #print(x,"\n\n\n")
@@ -681,6 +707,14 @@ Check your input and its case(starting letter of Days must be capital!!)""")
                 print(tabulate(r, headers='keys', tablefmt='psql'))
                 input()
             elif op==1:
+                print()
+                print(r"""
+                                                             _    ____  ____    ____  _   _ ____  _____ ____  
+                                                            / \  |  _ \|  _ \  | __ )| | | / ___|| ____/ ___| 
+                                                           / _ \ | | | | | | | |  _ \| | | \___ \|  _| \___ \ 
+                                                          / ___ \| |_| | |_| | | |_) | |_| |___) | |___ ___) |
+                                                         /_/   \_\____/|____/  |____/ \___/|____/|_____|____/
+                                                         """)
                 z=input("Enter the bus_no: ")
                 z=z.upper()
                 while z in e.index:
@@ -720,8 +754,18 @@ Check your input and its case(starting letter of Days must be capital!!)""")
                 e.loc[z,:]=l
                 print()
                 print("✅ Your bus has been successfully added")
+                input()
                 
             elif op==2:
+                print()
+                print(r"""
+                                              ____  _____ __  __  _____     _______   ____  _   _ ____  _____ ____  
+                                             |  _ \| ____|  \/  |/ _ \ \   / / ____| | __ )| | | / ___|| ____/ ___| 
+                                             | |_) |  _| | |\/| | | | \ \ / /|  _|   |  _ \| | | \___ \|  _| \___ \ 
+                                             |  _ <| |___| |  | | |_| |\ V / | |___  | |_) | |_| |___) | |___ ___) |
+                                             |_| \_\_____|_|  |_|\___/  \_/  |_____| |____/ \___/|____/|_____|____/
+                                             """)
+                                                                        
                 d=input("Enter the bus_no you want to remove:")
                 d=d.upper()
                 while d not in e.index:
@@ -731,9 +775,18 @@ Check your input and its case(starting letter of Days must be capital!!)""")
                 e.drop([d],inplace=True)
                 print()
                 print("✅ Your bus have been successfully remove")
-                
+                input()
                 
             elif op==3:
+                print()
+                print(r"""
+                                                              __  __  ___  ____ ___ _______   __
+                                                             |  \/  |/ _ \|  _ \_ _|  ___\ \ / /
+                                                             | |\/| | | | | | | | || |_   \ V / 
+                                                             | |  | | |_| | |_| | ||  _|   | |  
+                                                             |_|  |_|\___/|____/___|_|     |_|
+                                                             """)
+                                    
                 z=input("Enter the bus_no: ")
                 z=z.upper()
                 n=int(input("Enter what you want to change the no of tickects to: "))
@@ -744,35 +797,101 @@ Check your input and its case(starting letter of Days must be capital!!)""")
                 e.loc[z,"Tickets"]=n
                 print()
                 print("✅ The number of tickets have been successfully modified.")
+                input()
             elif op==6:
                     e.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt")
                     start()
             elif op==5:
-                while True:
-                    print("""1.Ticket statistics
-2.Sales Report
-3.Booking analytics
-4.Admin dashboard""")
-                    cho=input("Enter your option : ")
-                    if cho==1:
-                        continue
-                        
-                #“Ticket Statistics”
                 
-                #“Sales Report”
-                #“Booking Analytics”
-                #“Admin Dashboard”
-                pass
+                while True:
+                    print()
+                    print(r"""
+                                                      ____ _____  _  _____ ___ ____ _____ ___ ____ ____  
+                                                     / ___|_   _|/ \|_   _|_ _/ ___|_   _|_ _/ ___/ ___| 
+                                                     \___ \ | | / _ \ | |  | |\___ \ | |  | | |   \___ \ 
+                                                      ___) || |/ ___ \| |  | | ___) || |  | | |___ ___) |
+                                                     |____/ |_/_/   \_\_| |___|____/ |_| |___\____|____/
+                                                     """)
+                                                     
+                    print("""1) Tickets sold per destination
+2) Remaining tickets per destination
+3) Exit""")
+                    c=input("Enter your option : ")
+                    print()
+                    if c=="2":
+                        k=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt")
+                        ch=k[k["End"]=="Chennai"]
+                        ba=k[k["End"]=="Bangalore"]
+                        ra=k[k["End"]=="Rameshwaram"]
+                        my=k[k["End"]=="Mysore"]
+                        ka=k[k["End"]=="Kanyakumari"]
+                        t1=ch["Tickets"]
+                        t2=ba["Tickets"]
+                        t3=ra["Tickets"]
+                        t4=my["Tickets"]
+                        t5=ka["Tickets"]
+                        total1=t1.sum()
+                        total2=t2.sum()
+                        total3=t3.sum()
+                        total4=t4.sum()
+                        total5=t5.sum()
+                        x=["Chennai","Bangalore","Rameshwaram","Mysore","Kanyakumari"]
+                        y=[total1,total2,total3,total4,total5]
+                        plt.figure(figsize=(8,5))
+                        plt.bar(x,y,color="#4A90E2",edgecolor="black",linewidth=1,width=0.6)
+                        plt.title("Remaining tickets per destination",fontsize=16,fontweight="bold")
+                        plt.ylabel("Number of tickets remaining",fontsize=12)
+                        plt.xlabel("Destination",fontsize=12)
+                        plt.grid(axis="y",color="gray",linestyle="--",linewidth=0.5,alpha=0.5)
+                        plt.xticks(rotation=20)
+                        plt.tight_layout()
+                        plt.show()
+                        print()
+                        input()
+                        continue
+                    elif c=="1":
+                        k=pd.read_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\booking.txt")
+                        ch=k[k["to"]=="Chennai"]
+                        ba=k[k["to"]=="Bangalore"]
+                        ra=k[k["to"]=="Rameshwaram"]
+                        my=k[k["to"]=="Mysore"]
+                        ka=k[k["to"]=="Kanyakumari"]
+                        t1=ch["to"]
+                        t2=ba["to"]
+                        t3=ra["to"]
+                        t4=my["to"]
+                        t5=ka["to"]
+                        total1=len(t1)
+                        total2=len(t2)
+                        total3=len(t3)
+                        total4=len(t4)
+                        total5=len(t5)
+                        x=["Chennai","Bangalore","Rameshwaram","Mysore","Kanyakumari"]
+                        y=[total1,total2,total3,total4,total5]
+                        plt.figure(figsize=(8,5))
+                        plt.bar(x,y,color="#4A90E2",edgecolor="black",linewidth=1,width=0.6)
+                        plt.title("Remaining tickets per destination",fontsize=16,fontweight="bold")
+                        plt.ylabel("Number of tickets remaining",fontsize=12)
+                        plt.xlabel("Destination",fontsize=12)
+                        plt.grid(axis="y",color="gray",linestyle="--",linewidth=0.5,alpha=0.5)
+                        plt.xticks(rotation=20)
+                        plt.tight_layout()
+                        plt.show()
+                        print()
+                        input()
+                        continue
+                    elif c=="3":
+                        break
+                    else:
+                        print()
+                        print("Invalid input")
+                        print()
+                        continue
             else:
+                print()
                 print("Invalid input")
-                print("""Options:
-                1.Adding buses
-                2.Deleting buses
-                3.Modifying the number of tickets 
-                4.View
-                5.Sales Report
-                6.Exit""")
-                op=int(input("Enter your option: "))
+                print()
+                continue
                 
                 
             
