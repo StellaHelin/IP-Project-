@@ -599,17 +599,17 @@ def admin():
             6.Exit""")
             op=int(input("Enter your option:"))
             if op==4:
-                x=input("enter the start location you want to access (All/filtered values):")
+                x=input("Enter the start location you want to access (All/filtered values):")
                 x=x.split(",")
                 #print(x,"\n\n\n")
                 i=0
                 while i<len(x):
                     while x[i]!="All" and (x[i].lower() not in start_list) or not x[i][0].isupper():
-                            print("""error!
-check your input and its case(starting letter of cities must be capital!!)""")
-                            print("the error is in input",x[i])
+                            print("""Error!
+Check your input and its case(starting letter of cities must be capital!!)""")
+                            print("The error is in input",x[i])
                             print()
-                            x=input("enter the start location you want to access (All/filtered values):")
+                            x=input("Enter the start location you want to access (All/filtered values):")
                             x=x.split(",")
                             i=0
                     i+=1
@@ -623,16 +623,16 @@ check your input and its case(starting letter of cities must be capital!!)""")
                 print()
                 
                 
-                y=input("enter the end location you want to access(All/filtered values):")
+                y=input("Enter the end location you want to access(All/filtered values):")
                 y=y.split(",")
                 i=0
                 while i<len(y):
                     while y[i]!="All" and (y[i].lower() not in end_list) or not x[i][0].isupper():
-                            print("""error!
-check your input and its case(starting letter of cities must be capital!!)""")
-                            print("the error is in input",x[i])
+                            print("""Error!
+Check your input and its case(starting letter of cities must be capital!!)""")
+                            print("The error is in input",x[i])
                             print()
-                            y=input("enter the end location you want to access (All/filtered values):")
+                            y=input("Enter the end location you want to access (All/filtered values):")
                             y=y.split(",")
                             i=0
                     i+=1
@@ -645,16 +645,16 @@ check your input and its case(starting letter of cities must be capital!!)""")
                 print()
                 
                 
-                t=input("enter the travel agency you want to access(All/filtered):")
+                t=input("Enter the travel agency you want to access(All/filtered):")
                 t=t.split(",")
                 i=0
                 
                 while i<len(t):
                     while t[i]!="All" and t[i].lower() not in e["Name"].values:
                             print("""error!
-check your input and its case""")
+Check your input and its case""")
                             print()
-                            t=input("enter the travel agency you want to access(All/filtered):")
+                            t=input("Enter the travel agency you want to access(All/filtered):")
                             t=t.split(",")
                             i=0
                     i=i+1
@@ -667,11 +667,11 @@ check your input and its case""")
                 print()
                 
                 
-                z=input("enter the day you want to access(All/filtered):")
+                z=input("Enter the day you want to access(All/filtered):")
                 while z!="All" and z.lower() not in e["Day"].values or not z[0].isupper():
-                        print("""error!
-check your input and its case(starting letter of Days must be capital!!)""")
-                        z=input("enter the day you want to access(All/filtered):")
+                        print("""Error!
+Check your input and its case(starting letter of Days must be capital!!)""")
+                        z=input("Enter the day you want to access(All/filtered):")
                 if z=="All":
                     z=c["Day"]
                 r=c[c.loc[:,"Day"]==z]
@@ -748,7 +748,17 @@ check your input and its case(starting letter of Days must be capital!!)""")
                     e.to_csv(r"C:\Users\stell\OneDrive\Documents\GitHub\IP-Project-\busdetail.txt")
                     start()
             elif op==5:
+                while True:
+                    print("""1.Ticket statistics
+2.Sales Report
+3.Booking analytics
+4.Admin dashboard""")
+                    cho=input("Enter your option : ")
+                    if cho==1:
+                        continue
+                        
                 #“Ticket Statistics”
+                
                 #“Sales Report”
                 #“Booking Analytics”
                 #“Admin Dashboard”
