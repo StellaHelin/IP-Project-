@@ -39,7 +39,6 @@ R6102,Rameshwaram,Chennai,royal_travels,7:45am,400.0,Tuesday,22.0
 R6103,Rameshwaram,Chennai,ksrtc,8:30am,420.0,Wednesday,35.0
 R6104,Rameshwaram,Chennai,jetline,9:15am,415.0,Thursday,33.0
 R6105,Rameshwaram,Chennai,skyline,10:00am,430.0,Friday,29.0
-B7201,Bangalore,Chennai,redbus,5:00pm,300.0,Monday,34.0
 B7202,Bangalore,Chennai,ksrtc,6:30pm,310.0,Tuesday,31.0
 B7203,Bangalore,Chennai,orange_tours,7:45pm,295.0,Wednesday,28.0
 B7204,Bangalore,Chennai,greenline,9:00pm,320.0,Thursday,39.0
@@ -99,3 +98,4 @@ K9912,Kanyakumari,Rameshwaram,modern_bus,8:15am,260.0,Tuesday,32.0
 K9913,Kanyakumari,Rameshwaram,greenline,9:30am,240.0,Wednesday,23.0
 K9914,Kanyakumari,Rameshwaram,ksrtc,10:45am,255.0,Thursday,38.0
 K9915,Kanyakumari,Rameshwaram,redbus,12:00pm,245.0,Friday,35.0
+E123,bangalore,kanyakumari,ss,10:00am,2000.0,wednesday,45.0

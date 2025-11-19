@@ -7,3 +7,5 @@ code,name,age,sex,phone.no,from,to,bus_no,payment_method
 7431,DD,66,F,2438634745,Rameshwaram,Chennai,R6101,Card
 4922,BB,33,F,6475837485,Bangalore,Kanyakumari,B9801,UPI
 3339,A,44,M,3425673452,Mysore,Kanyakumari,M8105,UPI
+7663,bb,34,F,4556677889,Chennai,Mysore,C9101,UPI
+7663,cc,4,M,7878787878,Chennai,Mysore,C9101,UPI
