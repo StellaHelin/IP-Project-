@@ -578,11 +578,9 @@ def page_exit():
               \ V / _ \ || | '_|   | / _ \ || | '_| ' \/ -_) || | / -_) ' \/ _` (_-< | ' \/ -_) '_/ -_)  |  _/ _ \ '_| | ' \/ _ \ V  V /_| 
                |_|\___/\_,_|_|    _/ \___/\_,_|_| |_||_\___|\_, | \___|_||_\__,_/__/ |_||_\___|_| \___|  |_| \___/_|   |_||_\___/\_/\_/(_)
                                  |__/                       |__/                                 """)
-<<<<<<< HEAD
-    exit[1]
-=======
-    exit(0)
->>>>>>> 9beb411c01ff5bc8b427ad02620a3a063c2475af
+
+    exit(1)
+
     
 def admin():
     adm_phone="9535044904"
@@ -720,7 +718,10 @@ Check your input and its case(starting letter of Days must be capital!!)""")
                                                           / ___ \| |_| | |_| | | |_) | |_| |___) | |___ ___) |
                                                          /_/   \_\____/|____/  |____/ \___/|____/|_____|____/
                                                          """)
-                z=input("Enter the bus_no: ")
+                
+                
+                
+                """z=input("Enter the bus_no: ")
                 z=z.upper()
                 while z in e.index:
                     print("Invalid input bus aldready exists")
@@ -728,10 +729,16 @@ Check your input and its case(starting letter of Days must be capital!!)""")
                     z=z.upper()
                 l=[]
                 
-                f=input("Enter start location: ").lower()
-                while f not in start_list:
+                f=input("Enter start location: ")
+                e=f.lower()
+                while e not in start_list:
                     print("Start location does not belong in original data set")
                     f=input("Enter start location: ")
+                while f[0].islower():
+                    print("First letter of city must be capital!!!")
+                    f=input("Enter start location: ")
+                    
+                    
                 l.append(f)
                 
                 d=input("Enter drop location: ").lower()
@@ -759,7 +766,7 @@ Check your input and its case(starting letter of Days must be capital!!)""")
                 e.loc[z,:]=l
                 print()
                 print("✅ Your bus has been successfully added")
-                input()
+                input()""")
                 
             elif op==2:
                 print()
@@ -794,7 +801,7 @@ Check your input and its case(starting letter of Days must be capital!!)""")
                                     
                 z=input("Enter the bus_no: ")
                 z=z.upper()
-                n=int(input("Enter what you want to change the no of tickects to: "))
+                n=int(input("Enter the new ticket count: "))
                 while z not in e.index:
                     print("Invalid input bus does not exist")
                     z=input("Enter the bus_no: ")
